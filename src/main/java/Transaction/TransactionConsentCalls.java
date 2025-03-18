@@ -5,6 +5,8 @@ import io.restassured.specification.RequestSpecification;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$x;
 
 public class TransactionConsentCalls {
     RequestSpecification requestSpecificationTransaction= APITransactions.getTransactionsRequest();
@@ -18,10 +20,15 @@ public class TransactionConsentCalls {
         for (int i = 0; i < response.jsonPath().getList("data").size(); i++) {
             LinkedHashMap<String, Object> transactionList= (LinkedHashMap<String, Object>) response.jsonPath().getList("data").get(i);
             TransactionModel transactionModel=new TransactionModel();
-            transactionModel.setContragentAccount(transactionList.get("contragentAccount").toString());
-            transactionModel.setAccountNumber(transactionList.get("accountNumber").toString());
-            transactionModel.setAmount(transactionList.get("amount").toString());
-            transactionDetailsList.add(transactionModel);
+
+            if (transactionList.get("operationType").equals("საკუთარ ანგარიშებს შორის გადარიცხვა")&& transactionList.get("contragentAccount")!= null ) {
+
+                transactionModel.setContragentAccount(transactionList.get("contragentAccount").toString());
+                transactionModel.setAccountNumber(transactionList.get("accountNumber").toString());
+                transactionModel.setAmount(transactionList.get("amount").toString());
+                transactionDetailsList.add(transactionModel);
+            }
+
 
         }
 

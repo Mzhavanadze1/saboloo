@@ -55,7 +55,8 @@ public  class LoginPageElements {
     public SelenideElement TransferHeader=$x("//p[contains(text(),'გადარიცხვა')]");
     public SelenideElement TransFromAcc=$x("//div[p[1][contains(text(), 'საიდან')]]/p[2]");
     public SelenideElement TransToAcc=$x("//div[p[1][contains(text(), 'სად')]]/p[2]");
-    public SelenideElement TransactionAmount=$x("//div[p[1][contains(text(), '0.01')]]/p[2]");
+    public SelenideElement TransactionAmount=$x("//div[p[1][contains(text(), 'გადახდილი თანხა')]]/p[2]");
+
 
 
 

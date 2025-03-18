@@ -17,19 +17,25 @@ public class InternetBankWeb {
 
 
 @Test
-public  void LogInTest() throws SQLException, ClassNotFoundException {
+public  void LogInTest() throws SQLException, ClassNotFoundException, InterruptedException {
        open(BaseConfig.LoginPageUrl);
         Configuration.timeout=30000;
         AuthorizationSteps authorizationSteps=new AuthorizationSteps();
-        authorizationSteps.getTransactionHistory();
-//        authorizationSteps.login();
-//        authorizationSteps.cardsAndAccounts();
-//     authorizationSteps.blockAndUnblockCard();
-//
-//        authorizationSteps.PinResetAndChangeCardPin();
-//        authorizationSteps.CardsNextAndPrevious();
-//       authorizationSteps.TransferIn();
-//       authorizationSteps.CardHolderName();
+    authorizationSteps.login();
+    authorizationSteps.cardsAndAccounts();
+    authorizationSteps.blockAndUnblockCard();
+    authorizationSteps.PinResetAndChangeCardPin();
+    authorizationSteps.CardsNextAndPrevious();
+    authorizationSteps.CardHolderName();
+
+
+
+
+
+
+       authorizationSteps.TransferIn();
+
+       authorizationSteps.getTransactionHistory();
 
 
 

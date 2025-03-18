@@ -1,34 +1,25 @@
 import CardList.CardListConsentCalls;
 import CardList.CardModel;
 import Config.BaseConfig;
+import TotalAmountInCurrency.TotalAmountInCurrencyConsentCalls;
+import TotalAmountInCurrency.TotalAmountInCurrencyModel;
 import Transaction.TransactionConsentCalls;
 import Transaction.TransactionModel;
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.FileDownloadMode;
 import com.codeborne.selenide.Selenide;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
-import org.bouncycastle.pqc.jcajce.provider.sphincsplus.SignatureSpi;
-import org.json.JSONObject;
-import org.openqa.selenium.devtools.v133.filesystem.model.Directory;
-import org.openqa.selenium.json.Json;
 import org.testng.Assert;
 
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.*;
+import static java.lang.Thread.sleep;
 
 
 public class AuthorizationSteps extends LoginPageElements {
     public String Token;
-
 
 
     public void login() {
@@ -67,7 +58,6 @@ public class AuthorizationSteps extends LoginPageElements {
     public void blockAndUnblockCard() {
         ChooseCard.click();
         AccountsHeader.shouldBe(Condition.visible);
-
 
 
         ShowBlockOrUnblockCardPopup.click();
@@ -113,8 +103,8 @@ public class AuthorizationSteps extends LoginPageElements {
         CardNumber.shouldHave(text("1638"));
         SelectPreviousCard.click();
         CardNumber.shouldHave(text("1072"));
-       DownloadReq.click();
-       Selenide.sleep(5000);
+        DownloadReq.click();
+        Selenide.sleep(5000);
         File directory = new File("build/downloads");
         Assert.assertTrue(directory.listFiles()[0].listFiles()[0].getName().equals("Requisites.pdf"));
 
@@ -123,7 +113,7 @@ public class AuthorizationSteps extends LoginPageElements {
 
     }
 
-    public void TransferIn() {
+    public void TransferIn() throws InterruptedException {
         TransferBtn.click();
         TransferHeader.scrollTo();
         InnerTransferBtn.click();
@@ -132,11 +122,13 @@ public class AuthorizationSteps extends LoginPageElements {
         AccountItem.shouldBe(Condition.visible);
         AccountItem.click();
         ChooseAccount.click();
-        MoneyInput.setValue("0.01");
+        Random random = new Random();
+        Double AmountRan = random.nextDouble(Double.valueOf(0.01), Double.valueOf(0.3));
+        MoneyInput.setValue(AmountRan.toString());
         MoneyTransferBtn.click();
         SuccessTransfer.shouldBe(Condition.visible);
-        String TransferFrom=TransFromAcc.text();
-        String TransferTo=TransToAcc.text();
+        sleep(2000);
+
 
     }
 
@@ -149,10 +141,9 @@ public class AuthorizationSteps extends LoginPageElements {
         QueryOfSql queryOfSql = new QueryOfSql();
         this.Token = queryOfSql.getToken();
         CardListConsentCalls consentCalls = new CardListConsentCalls();
-        ArrayList <CardModel> cardList = consentCalls.cardListConsent( this.Token);
+        ArrayList<CardModel> cardList = consentCalls.cardListConsent(this.Token);
         for (int i = 0; i < cardList.size(); i++) {
-            cardList.get(i).getCardNickName();
-            if (cardList.get(i).getCardNumber().equals(CardNumber.text())){
+            if (cardList.get(i).getCardNumber().equals(CardNumber.text())) {
                 CardName.shouldBe(Condition.text(cardList.get(i).getCardNickName()));
                 System.out.println(cardList.get(i).getCardNickName());
                 System.out.println(cardList.get(i).getCardNumber());
@@ -163,25 +154,39 @@ public class AuthorizationSteps extends LoginPageElements {
 
 
     }
+
     public void getTransactionHistory() throws SQLException, ClassNotFoundException {
-        TransactionConsentCalls transactionConsentCalls=new TransactionConsentCalls();
-        ArrayList<TransactionModel> transactionList=transactionConsentCalls.transactionConsent();
+        TransactionConsentCalls transactionConsentCalls = new TransactionConsentCalls();
+        ArrayList<TransactionModel> transactionList = transactionConsentCalls.transactionConsent();
+        Boolean TransactionExit = false;
         for (int i = 0; i < transactionList.size(); i++) {
-            transactionList.get(i).getAmount();
-            if(transactionList.get(i).getAmount().equals(TransactionAmount.text())){
-                System.out.println(transactionList.get(i).getAmount());
-                System.out.println(transactionList.get(i).getAccountNumber());
-                System.out.println(transactionList.get(i).getContragentAccount());
+
+            if (transactionList.get(i).getAccountNumber().equals(TransFromAcc.text()) &&
+                    transactionList.get(i).getContragentAccount().equals(TransToAcc.text()) &&
+                    transactionList.get(i).getAmount().equals((TransactionAmount.text()).split(" ")[0])) {
+
+                TransactionExit = true;
+                break;
             }
+        }
+        Assert.assertTrue(TransactionExit);
 
+    }
 
+    public void amountInCurrency() throws SQLException, ClassNotFoundException {
+        TotalAmountInCurrencyConsentCalls totalAmountInCurrencyConsentCalls = new TotalAmountInCurrencyConsentCalls();
+        QueryOfSql queryOfSql = new QueryOfSql();
+        this.Token = queryOfSql.getToken();
+        ArrayList<TotalAmountInCurrencyModel> currencyList = totalAmountInCurrencyConsentCalls.totalAmountInCurrencyConsent(this.Token);
+        for (int i = 0; i < currencyList.size(); i++) {
+            if (currencyList.get(i).getCurrency().equals(CardNumber.text())) {
+                System.out.println("m");
+            }
         }
 
-    }
-
-
 
     }
+}
 
 
 
