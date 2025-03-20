@@ -13,7 +13,7 @@ public class APITotalAmountsInCurrencyTerms {
     public static RequestSpecification totalAmountRequest(String token){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("PersonId", 2893448);
-        jsonObject.put("ExcludeBalace",false);
+        jsonObject.put("ExcludeBalace","false");
         return given()
                 .baseUri(baseUrl)
                 .basePath("/api/Account/AccountList")

@@ -27,7 +27,6 @@ public class AuthorizationSteps extends LoginPageElements {
         Password.click();
         Password.sendKeys(BaseConfig.Password);
         LogInBtn.click();
-//        sleep(1000);
         OtpCodeInput.click();
         OtpCodeInput.sendKeys(BaseConfig.Otp);
         SendOtpBtn.click();
@@ -108,8 +107,6 @@ public class AuthorizationSteps extends LoginPageElements {
         File directory = new File("build/downloads");
         Assert.assertTrue(directory.listFiles()[0].listFiles()[0].getName().equals("Requisites.pdf"));
 
-//       File DownloadFile= DownloadReq.download();
-//       DownloadFile.getName().equals("Requisites.pdf");
 
     }
 
@@ -155,6 +152,55 @@ public class AuthorizationSteps extends LoginPageElements {
 
     }
 
+    public void amountInCurrency() throws SQLException, ClassNotFoundException {
+        TotalAmountInCurrencyConsentCalls totalAmountInCurrencyConsentCalls = new TotalAmountInCurrencyConsentCalls();
+        QueryOfSql queryOfSql = new QueryOfSql();
+        this.Token = queryOfSql.getToken();
+        ArrayList<TotalAmountInCurrencyModel> currencyList = totalAmountInCurrencyConsentCalls.totalAmountInCurrencyConsent(this.Token, Account.text());
+
+        double sum = 0.00;
+        String totalCurrencySym = "₾";
+        for (int i = 0; i < currencyList.size(); i++) {
+            String CurrencyCode= currencyList.get(i).getCurrency();
+            String CurrencySym = "";
+            double balance=0.00;
+            try {
+                balance = Double.parseDouble(currencyList.get(i).getBalance().toString());
+            }catch (Exception e){
+                System.out.println("shecdoma debilo" + currencyList.get(i).getBalance());
+            }
+            System.out.println("valut"+ CurrencyCode + "Tanxa"+ balance);
+
+            if (CurrencyCode.equalsIgnoreCase("GEL")) {
+                CurrencySym="₾";
+                AmountInGel.shouldBe(Condition.text(String.format("%.2f", balance) + CurrencySym));
+                sum += balance;
+            }else if (CurrencyCode.equalsIgnoreCase("USD")) {
+                CurrencySym = "$";
+                AmountInDollar.shouldBe(Condition.text(String.format("%.2f", balance) + CurrencySym));
+                sum += balance * 2.816;
+            }else {
+                System.out.println("ucnobi valuta"+CurrencyCode);
+            }
+
+////            String CurrencySym = "";
+//            String totalCurrencySym= "₾";
+//            if (currencyList.get(i).getCurrency().equalsIgnoreCase("GEL")) {
+//                CurrencySym = "₾";
+//                AmountInGel.shouldBe(Condition.text(String.format("%.2f", currencyList.get(i).getBalance()) + CurrencySym));
+//                sum += Double.parseDouble(currencyList.get(i).getBalance().toString());
+//
+//            } else if (currencyList.get(i).getCurrency().equalsIgnoreCase("USD")) {
+//                CurrencySym = "$";
+//                AmountInDollar.shouldBe(Condition.text(String.format("%.2f", currencyList.get(i).getBalance()) + CurrencySym));
+//                sum += Double.parseDouble(currencyList.get(i).getBalance().toString()) * 2.816;
+//
+//            }
+        }
+        TotalAmountInWeb.shouldBe(Condition.text(String.format("%.2f", sum) + " " + totalCurrencySym));
+    }
+
+
     public void getTransactionHistory() throws SQLException, ClassNotFoundException {
         TransactionConsentCalls transactionConsentCalls = new TransactionConsentCalls();
         ArrayList<TransactionModel> transactionList = transactionConsentCalls.transactionConsent();
@@ -172,21 +218,13 @@ public class AuthorizationSteps extends LoginPageElements {
         Assert.assertTrue(TransactionExit);
 
     }
-
-    public void amountInCurrency() throws SQLException, ClassNotFoundException {
-        TotalAmountInCurrencyConsentCalls totalAmountInCurrencyConsentCalls = new TotalAmountInCurrencyConsentCalls();
-        QueryOfSql queryOfSql = new QueryOfSql();
-        this.Token = queryOfSql.getToken();
-        ArrayList<TotalAmountInCurrencyModel> currencyList = totalAmountInCurrencyConsentCalls.totalAmountInCurrencyConsent(this.Token);
-        for (int i = 0; i < currencyList.size(); i++) {
-            if (currencyList.get(i).getCurrency().equals(CardNumber.text())) {
-                System.out.println("m");
-            }
-        }
-
-
-    }
 }
+
+
+
+
+
+
 
 
 

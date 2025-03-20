@@ -56,45 +56,9 @@ public  class LoginPageElements {
     public SelenideElement TransFromAcc=$x("//div[p[1][contains(text(), 'საიდან')]]/p[2]");
     public SelenideElement TransToAcc=$x("//div[p[1][contains(text(), 'სად')]]/p[2]");
     public SelenideElement TransactionAmount=$x("//div[p[1][contains(text(), 'გადახდილი თანხა')]]/p[2]");
+    public SelenideElement Account=$x("//p[contains(text(), 'GE68CD0360000036651563')]");
+    public SelenideElement AmountInGel = $x("/html/body/app-root/app-home/div/div/app-accounts-and-cards-details/div/div[2]/div[1]/div[1]/div[1]/div[1]/p[1]");
+    public SelenideElement AmountInDollar = $x("/html/body/app-root/app-home/div/div/app-accounts-and-cards-details/div/div[2]/div[1]/div[1]/div[1]/div[1]/p[2]");
+    public SelenideElement TotalAmountInWeb = $x("/html/body/app-root/app-home/div/div/app-accounts-and-cards-details/div/div[2]/div[1]/div[1]/div[1]/p");
 
-
-
-
-
-
-
-
-
-
-//
-//
-//
-//
-//
-
-//
-
-//
-//    @FindBy(className = "paragraph-14")
-//    public WebElement InnerTransfer;
-//
-//    @FindBy(className = "advanced-accounts-select custom-style")
-//    public WebElement AccountsSelectFrom;
-//
-
-//
-//    @FindBy(className = "ng-pristine ng-invalid ng-touched")
-//    public WebElement Money;
-//
-//    @FindBy(className = "primary next")
-//    public WebElement TransferBtn;
-//
-//    @FindBy(className = "payment-success-popup")
-//    public WebElement PaymentSuccessPopup;
-//
-//    @FindBy(className = "icon close-black grey-010 pointer")
-//    public WebElement ClosePaymentSuccessPopup;
-//
-//    @FindBy(className = "img home")
-//    public WebElement Home;
 }

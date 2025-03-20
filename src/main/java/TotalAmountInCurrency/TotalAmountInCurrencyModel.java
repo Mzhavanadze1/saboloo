@@ -10,7 +10,7 @@ import lombok.ToString;
 
 public class TotalAmountInCurrencyModel {
     public String currency;
-    public Integer Balance;
-    public String AccNumberAvailableName;
+    public Double Balance;
+    public String AccountNumber;
 
 }
